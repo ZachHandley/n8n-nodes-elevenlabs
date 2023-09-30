@@ -1,32 +1,33 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
-import { httpVerbFields, httpVerbOperations } from './HttpVerbDescription';
+import { httpVerbFields, httpVerbOperations } from './ModelsDescription';
 
-export class HttpBin implements INodeType {
+export class ElevenLabs implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'HttpBin',
-		name: 'httpBin',
-		icon: 'file:httpbin.svg',
+		displayName: 'ElevenLabs',
+		name: 'elevenLabs',
+		icon: 'file:elevenlabs.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: 'Interact with HttpBin API',
+		description: 'Interact with ElevenLabs Text-to-Speech API and generate your own voices!',
 		defaults: {
-			name: 'HttpBin',
+			name: 'ElevenLabs',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'httpbinApi',
-				required: false,
+				name: 'elevenLabsApi',
+				required: true,
 			},
 		],
 		requestDefaults: {
-			baseURL: 'https://httpbin.org',
+			baseURL: 'https://api.elevenlabs.io/v1/',
 			url: '',
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
+				'xi-api-key': '={{$credentials.apiKey}}',
 			},
 		},
 		/**
@@ -48,15 +49,29 @@ export class HttpBin implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'HTTP Verb',
-						value: 'httpVerb',
+						name: 'Models',
+						value: 'models',
+					},
+					{
+						name: "Voices",
+						value: "voices",
+					},
+					{
+						name: "Samples",
+						value: "samples",
+					},
+					{
+						name: "History",
+						value: "history",
+					},
+					{
+						name: "User",
+						value: "user",
 					},
 				],
-				default: 'httpVerb',
+				default: 'voices',
 			},
-
-			...httpVerbOperations,
-			...httpVerbFields,
+			// PUT OPERATIONS AND FIELDS HERE
 		],
 	};
 }

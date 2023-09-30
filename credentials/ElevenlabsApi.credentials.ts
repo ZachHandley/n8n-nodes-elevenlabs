@@ -5,22 +5,16 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export class HttpBinApi implements ICredentialType {
-	name = 'httpbinApi';
-	displayName = 'HttpBin API';
-	documentationUrl = '<your-docs-url>';
+export class ElevenLabsApi implements ICredentialType {
+	name = 'elevenLabsApi';
+	displayName = 'ElevenLabs API';
+	documentationUrl = 'https://github.com/zachhandley/n8n-nodes-elevenlabs';
 	properties: INodeProperties[] = [
 		{
-			displayName: 'Token',
-			name: 'token',
+			displayName: 'API Key',
+			name: 'apiKey',
 			type: 'string',
 			default: '',
-		},
-		{
-			displayName: 'Domain',
-			name: 'domain',
-			type: 'string',
-			default: 'https://httpbin.org',
 		},
 	];
 
@@ -32,7 +26,8 @@ export class HttpBinApi implements ICredentialType {
 		type: 'generic',
 		properties: {
 			headers: {
-				Authorization: '={{"Bearer " + $credentials.token}}',
+				"xi-api-key": '={{$credentials.apiKey}}',
+				"accept": "application/json",
 			},
 		},
 	};
@@ -40,8 +35,8 @@ export class HttpBinApi implements ICredentialType {
 	// The block below tells how this credential can be tested
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: '={{$credentials?.domain}}',
-			url: '/bearer',
+			baseURL: 'https://api.elevenlabs.io/v1',
+			url: '/voices',
 		},
 	};
 }
